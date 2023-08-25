@@ -7,8 +7,8 @@ const AppRouter = () => {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Photo />} />
-        <Route path="/list" element={<List />} />
+        <Route path="/" element={<List />} />
+       
       </Routes>
     </Router>
   );

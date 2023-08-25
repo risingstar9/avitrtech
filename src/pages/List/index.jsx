@@ -1,15 +1,32 @@
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const List = () => {
   const [isLoading, setIsLoading] = useState(true);
+  const [shopdata, setData] = useState(null);
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "https://app.avitrtech.com/connect/v1/3209768/p/SoS1m9Q"
+        );
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
+
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 3000);
 
     return () => clearTimeout(timer);
   }, []);
+
+  // console.log("dkdkkdkdd", shopdata.products);
 
   return (
     <div className="w-full h-full">
@@ -35,136 +52,102 @@ const List = () => {
         >
           <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
           <div className="w-full h-[71px] mt-[21px] flex flex-row px-[16px]">
-            <img className="w-[44px] h-[29px] mt-[9px]" src="mark.png" />
+            <img
+              className="w-[44px] h-[29px] mt-[9px]"
+              src={shopdata.customer_logo}
+            />
             <div className="ml-[24px] flex flex-col">
               <text className=" text-[#010101] font-inter text-[20px] font-semibold leading-normal">
-                Your List (3)
+                {shopdata.store_name}
               </text>
               <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-medium leading-normal">
-                Store #1234
+                {shopdata.store_name} {shopdata.store_number}
               </text>
             </div>
           </div>
           <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
+
           <div className="w-full flex-col flex pl-[16px] pt-[24px]">
-            <div className="w-[377px] pb-[32px] pl-[10px] pr-[16px] py-[4px]">
-              <div className="flex flex-row">
-                <img className="w-[39px] h-[47px] mt-[2px]" src="list1.png" />
-                <div className="flex flex-col ml-[20px]">
-                  <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
-                    Teton Sports
-                  </text>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
-                    Mammoth Queen Size Flannel Lined Sleeping Bag
-                  </text>
-                  <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    Qty: 1
-                  </text>
-                  <div className="mt-[4px] flex flex-row">
-                    <text className="text-[#1F232C] font-inter text-[14px] font-normal leading-[140.023%]">
-                      Color:
-                    </text>
-                    <text className="text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                      Green
-                    </text>
-                  </div>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                    $210.00
-                  </text>
-                  <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    IN STOCK - Product Location
-                  </text>
-                  <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
-                    <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
-                      Aisle: 5 - Bay: 12
-                    </text>
-                  </div>
-                  <text className="mt-[16px] text-[#1F232C] font-inter text-[14px] font-medium leading-[140.023%]">
-                    Scan the QR code below when checking out to appy the
-                    discount.
-                  </text>
-                  <div className="mt-[10px] w-[134px] h-[134px] flex flex-col justify-center items-center">
-                    <img className="w-[134px] h-[134px]" src="QR.png" />
-                    <text className="text-[#010101] text-center font-inter text-[14px] font-semibold leading-normal">
-                      10% Discount
-                    </text>
-                  </div>
-                  <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
-                    Code valid until 10/10/2023
-                  </text>
-                </div>
-              </div>
-            </div>
-            <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
+            {shopdata.products &&
+              shopdata.products.map((val) => {
+                console.log(val);
+                return (
+                  <div className="w-full  pl-[10px] pr-[16px] py-[4px]">
+                    <div className="flex flex-row">
+                      <img
+                        className="w-[39px] h-[47px] mt-[2px]"
+                        src={val.image_url}
+                      />
+                      <div className="flex flex-col ml-[20px]">
+                        <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
+                          {val.description.split("-")[0].trim()}
+                        </text>
+                        <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
+                          {val.description}
+                        </text>
+                        <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
+                          Qty: {val.quantity}
+                        </text>
+                        <div className="mt-[4px] flex flex-row">
+                          <text className="text-[#1F232C] font-inter text-[14px] font-normal leading-[140.023%]">
+                            Color:
+                          </text>
+                          <text className="text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
+                            Green
+                          </text>
+                        </div>
+                        <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
+                          ${val?.price}
+                        </text>
+                        <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
+                          IN STOCK - Product Location
+                        </text>
+                        <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
+                          <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
+                            Aisle: {val.product_location?.aisle} - Bay:{" "}
+                            {val.product_location?.bin}
+                          </text>
+                        </div>
+                        {val.discount?.qr_code ? (
+                          <>
+                            <text className="mt-[16px] text-[#1F232C] font-inter text-[14px] font-medium leading-[140.023%]">
+                              Scan the QR code below when checking out to appy
+                              the discount.
+                            </text>
+                            <div className="mt-[10px] w-[134px] h-[134px] flex flex-col justify-center items-center">
+                              {val?.discount?.qr_code ? (
+                                <img
+                                  className="w-[134px] h-[134px]"
+                                  src={val.discount.qr_code}
+                                />
+                              ) : (
+                                ""
+                              )}
 
-            <div className="mt-[25px] w-[377px] pb-[32px] pl-[10px] pr-[16px] py-[4px]">
-              <div className="flex flex-row">
-                <img className="w-[53px] h-[40px] mt-[2px]" src="list2.png" />
-                <div className="flex flex-col ml-[20px]">
-                  <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
-                    Pendleton
-                  </text>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
-                    Glacier National Park Queen Blanket
-                  </text>
-                  <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    Qty: 1
-                  </text>
-                  <div className="mt-[4px] flex flex-row">
-                    <text className="text-[#1F232C] font-inter text-[14px] font-normal leading-[140.023%]">
-                      Color:
-                    </text>
-                    <text className="text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                      striped
-                    </text>
+                              <text className="text-[#010101] text-center font-inter text-[14px] font-semibold leading-normal">
+                                {val?.discount?.discount_percent
+                                  ? val.discount.discount_percent + "% Discount"
+                                  : ""}
+                              </text>
+                            </div>
+                            <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
+                              {val?.discount?.expiry_date_yyyymmdd
+                                ? "ode valid until " +
+                                  val.discount.expiry_date_yyyymmdd
+                                : ""}
+                            </text>
+                          </>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                    <div className="w-full mt-[32px] h-[1px] bg-[#ECEEF0]"></div>
                   </div>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                    $330.00
-                  </text>
-                  <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    IN STOCK - Product Location
-                  </text>
-                  <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
-                    <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
-                      Aisle: 14 - Bay: 06
-                    </text>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
-
-            <div className="mt-[25px] w-[377px] pb-[32px] pl-[10px] pr-[16px] py-[4px]">
-              <div className="flex flex-row">
-                <img
-                  className="w-[53px] h-[44.52px] mt-[2px]"
-                  src="list3.png"
-                />
-                <div className="flex flex-col ml-[20px]">
-                  <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
-                    Gerber
-                  </text>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
-                    Bear Grylls Fire Starter
-                  </text>
-                  <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    Qty: 1
-                  </text>
-                  <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                    $23.00
-                  </text>
-                  <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                    IN STOCK - Product Location
-                  </text>
-                  <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
-                    <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
-                      Aisle: 18 - Bay: 03
-                    </text>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
+                  
+                );
+              })}
+            
             <text className="mt-[26px] text-[#979BA4] text-center font-inter text-[14px] font-semibold leading-normal">
               You’ve reached the end of your list.
             </text>

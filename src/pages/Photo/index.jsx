@@ -1,11 +1,14 @@
 import React from "react";
 import { useNavigate  } from 'react-router-dom';
+// import backImage from "../../../public/QR_bg.png";
+
 const Photo = () => {
   let navigate = useNavigate();
   return (
     <div className="w-full h-full items-center justify-start">
-      <img className="absolute w-[100%] h-[100%] z-0" src="QR_bg.png"></img>
-      <div className="absolute w-full h-full">
+      <div style={{ backgroundImage: `url("/QR_bg.png")`, backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat', }} className="absolute w-full h-full">
+      {/* <div className="w-full h-full"> */}
         <div className="w-full h-full flex flex-col items-center justify-between mx-auto ">
           <div className="rounded-t-[56px] flex flex-row  w-full pt-[77px] h-[132px] justify-between bg-black bg-opacity-50 px-[12px]">
             <div className="w-[28px] h-[28px]  mb-[25px]">
