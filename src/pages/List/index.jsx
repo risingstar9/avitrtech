@@ -70,7 +70,7 @@ const List = () => {
           <div className="w-full flex-col flex pl-[16px] pt-[24px]">
             {shopdata.products &&
               shopdata.products.map((val) => {
-                console.log(val);
+                console.log(shopdata?.customer_logo);
                 return (
                   <div className="w-full  pl-[10px] pr-[16px] py-[4px]">
                     <div className="flex flex-row">
