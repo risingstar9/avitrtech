@@ -58,7 +58,7 @@ const List = () => {
             />
             <div className="ml-[24px] flex flex-col">
               <text className=" text-[#010101] font-inter text-[20px] font-semibold leading-normal">
-                {shopdata.store_name}
+                Your List ({shopdata.products.length})
               </text>
               <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-medium leading-normal">
                 {shopdata.store_name} {shopdata.store_number}
