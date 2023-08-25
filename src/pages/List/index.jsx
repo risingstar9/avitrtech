@@ -4,13 +4,17 @@ import axios from "axios";
 const List = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [shopdata, setData] = useState(null);
+  let params = new URLSearchParams(window.location.search);
+  let c = params.get("c");
+  let r = params.get("r");
+  console.log(c, r);
 
   useEffect(() => {
+    const url = `https://app.avitrtech.com/connect/v1/${c}/p/${r}`;
+    console.log("URL", url);
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          "https://cors-anywhere.herokuapp.com/https://app.avitrtech.com/connect/v1/3209768/p/SoS1m9Q"
-        );
+        const response = await axios.get(url);
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data: ", error);
@@ -25,8 +29,6 @@ const List = () => {
 
     return () => clearTimeout(timer);
   }, []);
-
-  // console.log("dkdkkdkdd", shopdata.products);
 
   return (
     <div className="w-full h-full">
@@ -60,8 +62,8 @@ const List = () => {
               <text className=" text-[#010101] font-inter text-[20px] font-semibold leading-normal">
                 Your List ({shopdata.products.length})
               </text>
-              <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-medium leading-normal">
-                {shopdata.store_name} {shopdata.store_number}
+              <text className=" text-[#1F232C] font-inter text-[14px] font-medium leading-normal">
+                Store#{shopdata.store_number}
               </text>
             </div>
           </div>
@@ -97,17 +99,24 @@ const List = () => {
                           </text>
                         </div>
                         <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                          ${val?.price}
+                          {val?.price ? "$" + val.price : ""}
                         </text>
                         <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
                           IN STOCK - Product Location
                         </text>
-                        <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
-                          <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
-                            Aisle: {val.product_location?.aisle} - Bay:{" "}
-                            {val.product_location?.bin}
-                          </text>
-                        </div>
+                        {val.product_location?.aisle ? (
+                          <>
+                            <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
+                              <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
+                                Aisle: {val.product_location?.aisle} - Bay:{" "}
+                                {val.product_location?.bin}
+                              </text>
+                            </div>
+                          </>
+                        ) : (
+                          ""
+                        )}
+
                         {val.discount?.qr_code ? (
                           <>
                             <text className="mt-[16px] text-[#1F232C] font-inter text-[14px] font-medium leading-[140.023%]">
@@ -132,7 +141,7 @@ const List = () => {
                             </div>
                             <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
                               {val?.discount?.expiry_date_yyyymmdd
-                                ? "ode valid until " +
+                                ? "Code valid until " +
                                   val.discount.expiry_date_yyyymmdd
                                 : ""}
                             </text>
