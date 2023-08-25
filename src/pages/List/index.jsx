@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const { format, parseISO } = require("date-fns");
+
 const List = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [shopdata, setData] = useState(null);
@@ -29,6 +31,13 @@ const List = () => {
 
     return () => clearTimeout(timer);
   }, []);
+
+  const convertDatatype = (date) => {
+    const parsedDate = parseISO(date);
+    const formattedDate = format(parsedDate, "MM/dd/yyyy");
+
+    return formattedDate;
+  };
 
   return (
     <div className="w-full h-full">
@@ -70,93 +79,98 @@ const List = () => {
           <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
 
           <div className="w-full flex-col flex pl-[16px] pt-[24px]">
-            {
-              shopdata.products.map((val) => {
-                console.log(val.image_url);
-                // console.log(shopdata?.customer_logo); 
-                return (
-                  <div className="w-full  pl-[10px] pr-[16px] py-[4px]">
-                    <div className="flex flex-row">
-                      {val?.image_url ? <>
+            {shopdata.products.map((val) => {
+              console.log(val.image_url);
+              // console.log(shopdata?.customer_logo);
+              return (
+                <div className="w-full  pl-[10px] pr-[16px] py-[4px]">
+                  <div className="flex flex-row">
+                    {val?.image_url ? (
+                      <>
                         <img
-                        className="w-[39px] h-[47px] mt-[2px]"
-                        src={val.image_url}
-                      /></> : '' }
-                      <div className="flex flex-col ml-[20px]">
-                        <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
-                          {val.description.split("-")[0].trim()}
+                          className="w-[39px] h-[47px] mt-[2px]"
+                          src={val.image_url}
+                        />
+                      </>
+                    ) : (
+                      ""
+                    )}
+                    <div className="flex flex-col ml-[20px]">
+                      <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
+                        {val.description.split("-")[0].trim()}
+                      </text>
+                      <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
+                        {val.description}
+                      </text>
+                      <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
+                        Qty: {val.quantity}
+                      </text>
+                      <div className="mt-[4px] flex flex-row">
+                        <text className="text-[#1F232C] font-inter text-[14px] font-normal leading-[140.023%]">
+                          Color:
                         </text>
-                        <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-normal">
-                          {val.description}
+                        <text className="text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
+                          Green
                         </text>
-                        <text className="mt-[10px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                          Qty: {val.quantity}
-                        </text>
-                        <div className="mt-[4px] flex flex-row">
-                          <text className="text-[#1F232C] font-inter text-[14px] font-normal leading-[140.023%]">
-                            Color:
-                          </text>
-                          <text className="text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                            Green
-                          </text>
-                        </div>
-                        <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
-                          {val?.price ? "$" + val.price : ""}
-                        </text>
-                        <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                          IN STOCK - Product Location
-                        </text>
-                        {val.product_location?.bin && val.product_location?.aisle ? (
-                          <>
-                            <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
-                              <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
-                                Aisle: {val.product_location?.aisle} - Bay:{" "}
-                                {val.product_location?.bin}
-                              </text>
-                            </div>
-                          </>
-                        ) : (
-                          ""
-                        )}
-
-                        {val.discount?.qr_code ? (
-                          <>
-                            <text className="mt-[16px] text-[#1F232C] font-inter text-[14px] font-medium leading-[140.023%]">
-                              Scan the QR code below when checking out to appy
-                              the discount.
+                      </div>
+                      <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
+                        {val?.price ? "$" + val.price : ""}
+                      </text>
+                      <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
+                        IN STOCK - Product Location
+                      </text>
+                      {val.product_location?.bin &&
+                      val.product_location?.aisle ? (
+                        <>
+                          <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
+                            <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
+                              Aisle: {val.product_location?.aisle} - Bay:{" "}
+                              {val.product_location?.bin}
                             </text>
-                            <div className="mt-[10px] w-[134px] h-[134px] flex flex-col justify-center items-center">
-                              {val?.discount?.qr_code ? (
-                                <img
-                                  className="w-[134px] h-[134px]"
-                                  src={val.discount.qr_code}
-                                />
-                              ) : (
-                                ""
-                              )}
+                          </div>
+                        </>
+                      ) : (
+                        ""
+                      )}
 
-                              <text className="text-[#010101] text-center font-inter text-[14px] font-semibold leading-normal">
-                                {val?.discount?.discount_percent
-                                  ? val.discount.discount_percent + "% Discount"
-                                  : ""}
-                              </text>
-                            </div>
-                            <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
-                              {val?.discount?.expiry_date_yyyymmdd
-                                ? "Code valid until " +
-                                  val.discount.expiry_date_yyyymmdd
+                      {val.discount?.qr_code ? (
+                        <>
+                          <text className="mt-[16px] text-[#1F232C] font-inter text-[14px] font-medium leading-[140.023%]">
+                            Scan the QR code below when checking out to appy the
+                            discount.
+                          </text>
+                          <div className="mt-[10px] w-[134px] h-[134px] flex flex-col justify-center items-center">
+                            {val?.discount?.qr_code ? (
+                              <img
+                                className="w-[134px] h-[134px]"
+                                src={val.discount.qr_code}
+                              />
+                            ) : (
+                              ""
+                            )}
+
+                            <text className="text-[#010101] text-center font-inter text-[14px] font-semibold leading-normal">
+                              {val?.discount?.discount_percent
+                                ? val.discount.discount_percent + "% Discount"
                                 : ""}
                             </text>
-                          </>
-                        ) : (
-                          ""
-                        )}
-                      </div>
+                          </div>
+                          <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
+                            {val?.discount?.expiry_date_yyyymmdd
+                              ? "Code valid until " +
+                              convertDatatype(val.discount.expiry_date_yyyymmdd)
+                              : ""}
+                          </text>
+                        </>
+                      ) : (
+                        ""
+                      )}
                     </div>
-                    <div className="w-full mt-[32px] h-[1px] bg-[#ECEEF0]"></div>
                   </div>
-                );
-              })}
+                  <div className="w-full mt-[32px] h-[1px] bg-[#ECEEF0]"></div>
+                </div>
+              );
+            })}
             <text className="mt-[26px] text-[#979BA4] text-center font-inter text-[14px] font-semibold leading-normal">
               You’ve reached the end of your list.
             </text>
