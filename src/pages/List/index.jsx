@@ -70,16 +70,18 @@ const List = () => {
           <div className="w-full h-[1px] bg-[#ECEEF0]"></div>
 
           <div className="w-full flex-col flex pl-[16px] pt-[24px]">
-            {shopdata.products &&
+            {
               shopdata.products.map((val) => {
-                console.log(shopdata?.customer_logo);
+                console.log(val.image_url);
+                // console.log(shopdata?.customer_logo); 
                 return (
                   <div className="w-full  pl-[10px] pr-[16px] py-[4px]">
                     <div className="flex flex-row">
-                      <img
+                      {val?.image_url ? <>
+                        <img
                         className="w-[39px] h-[47px] mt-[2px]"
                         src={val.image_url}
-                      />
+                      /></> : '' }
                       <div className="flex flex-col ml-[20px]">
                         <text className="text-[#BABBBF] font-inter text-[14px] font-normal leading-normal">
                           {val.description.split("-")[0].trim()}
@@ -104,7 +106,7 @@ const List = () => {
                         <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
                           IN STOCK - Product Location
                         </text>
-                        {val.product_location?.aisle ? (
+                        {val.product_location?.bin && val.product_location?.aisle ? (
                           <>
                             <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
                               <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
