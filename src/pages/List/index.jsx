@@ -116,12 +116,13 @@ const List = () => {
                       <text className="mt-[6px] text-[#1F232C] font-inter text-[14px] font-semibold leading-[140.023%]">
                         {val?.price ? "$" + val.price : ""}
                       </text>
-                      <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
-                        IN STOCK - Product Location
-                      </text>
+
                       {val.product_location?.bin &&
                       val.product_location?.aisle ? (
                         <>
+                          <text className="mt-[13px] text-[#979BA4] font-inter text-[14px] font-medium leading-[140.023%]">
+                            IN STOCK - Product Location
+                          </text>
                           <div className="mt-[5px] w-[154px] justify-center items-center flex flex-col  h-[31px] rounded-[6px] bg-[#010101]">
                             <text className="text-white text-center font-inter text-[14px] font-semibold leading-normal">
                               Aisle: {val.product_location?.aisle} - Bay:{" "}
@@ -158,7 +159,9 @@ const List = () => {
                           <text className="mt-[16px] text-[#979BA4] font-Inter text-[12px] font-medium leading-[140.023%]">
                             {val?.discount?.expiry_date_yyyymmdd
                               ? "Code valid until " +
-                              convertDatatype(val.discount.expiry_date_yyyymmdd)
+                                convertDatatype(
+                                  val.discount.expiry_date_yyyymmdd
+                                )
                               : ""}
                           </text>
                         </>
