@@ -9,7 +9,7 @@ const List = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "https://app.avitrtech.com/connect/v1/3209768/p/SoS1m9Q"
+          "https://cors-anywhere.herokuapp.com/https://app.avitrtech.com/connect/v1/3209768/p/SoS1m9Q"
         );
         setData(response.data);
       } catch (error) {
@@ -144,10 +144,8 @@ const List = () => {
                     </div>
                     <div className="w-full mt-[32px] h-[1px] bg-[#ECEEF0]"></div>
                   </div>
-                  
                 );
               })}
-            
             <text className="mt-[26px] text-[#979BA4] text-center font-inter text-[14px] font-semibold leading-normal">
               You’ve reached the end of your list.
             </text>
